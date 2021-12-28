@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/upload">Cargar Archivo</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Tendencias
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/tendencia_infeccion_pais">Tendencia de la infección por
+                                Covid-19 en un País</a></li>
+                        <li><a class="dropdown-item" href="#">Tendencia del número de infectados por día de un País</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Tendencia de casos confirmados de Coronavirus en un
+                                departamento de un País</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Predicciones
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Predicción de Infertados en un País</a></li>
+                        <li><a class="dropdown-item" href="#">Predicción de mortalidad por COVID en un Departamento</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Predicción de mortalidad por COVID en un País</a></li>
+                        <li><a class="dropdown-item" href="#">Predicción de casos de un país para un año</a></li>
+                        <li><a class="dropdown-item" href="#">Predicción de muertes en el último día del primer año de
+                                infecciones en un país</a></li>
+                        <li><a class="dropdown-item" href="#">Predicciones de casos y muertes en todo el mundo - Neural
+                                Network MLPRegressor</a></li>
+                        <li><a class="dropdown-item" href="#">Predicción de casos confirmados por día</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Analisis
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Análisis del número de muertes por coronavirus en un
+                                País</a></li>
+                        <li><a class="dropdown-item" href="#">Ánalisis Comparativo de Vacunaciópn entre 2 paises</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Ánalisis Comparativo entres 2 o más paises o
+                                continentes</a></li>
+                        <li><a class="dropdown-item" href="#">Comportamiento y clasificación de personas infectadas por
+                                COVID-19 por municipio en un País</a></li>
+                        <li><a class="dropdown-item" href="#">Factores de muerte por COVID-19 en un país</a></li>
+                        <li><a class="dropdown-item" href="#">Comparación entre el número de casos detectados y el
+                                número de pruebas de un país</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Indices y Tasas
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Indice de Progresión de la pandemia</a></li>
+                        <li><a class="dropdown-item" href="#">Porcentaje de hombres infectados por covid-19 en un País
+                                desde el primer caso activo</a></li>
+                        <li><a class="dropdown-item" href="#">Muertes promedio por casos confirmados y edad de covid 19
+                                en un País</a></li>
+                        <li><a class="dropdown-item" href="#">Muertes según regiones de un país - Covid 19</a></li>
+                        <li><a class="dropdown-item" href="#">Porcentaje de muertes frente al total de casos en un país,
+                                región o continente</a></li>
+                        <li><a class="dropdown-item" href="#">Tasa de comportamiento de casos activos en relación al
+                                número de muertes en un continente</a></li>
+                        <li><a class="dropdown-item" href="#">Tasa de crecimiento de casos de COVID-19 en relación con
+                                nuevos casos diarios y tasa de muerte por COVID-19</a></li>
+                        <li><a class="dropdown-item" href="#">Tasa de mortalidad por coronavirus (COVID-19) en un
+                                país</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-8 mt-5">
+                {% block upload %}
+                {% endblock %}
+            </div>
+
+            <div class="col-8 mt-3">
+
+
+                {% block content %}
+                {% endblock %}
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
