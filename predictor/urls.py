@@ -8,5 +8,5 @@ urlpatterns = [
     path('predict_model/', views.predict_model),
     path('upload/', views.upload),
     path('', views.home),
-    path('tendencia_infeccion_pais/', views.predict_model),
+    path('tendencia_infeccion_pais/', views.tendencia_infeccion_pais),
 ]
