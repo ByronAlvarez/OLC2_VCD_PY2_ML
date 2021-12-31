@@ -109,7 +109,8 @@ def getGraph(date, country, cases, countryName, csv):
     fig4.savefig(flike)
     graph4 = base64.b64encode(flike.getvalue()).decode()
 
-    features2 = PolynomialFeatures(degree=np.argmin(errors, axis=0)[1])
+    bestdegree = np.argmin(errors, axis=0)[1]
+    features2 = PolynomialFeatures(degree=bestdegree)
 
     x_train_transformed2 = features2.fit_transform(X)
 
@@ -121,15 +122,22 @@ def getGraph(date, country, cases, countryName, csv):
     mse = mean_squared_error(y_true=y, y_pred=model_curve3)
     rmse = np.sqrt(mse)
     r2 = r2_score(y_true=y, y_pred=model_curve3)
+    coefs = model3.coef_
+
+    coefs = model3.coef_
+    eq = "y = " + str(model3.intercept_)
+    for i in range(len(coefs)):
+        if i != 0:
+            eq += " +(" + str(coefs[i])+")x^"+str(i)
 
     fig5 = plt.figure()
     plt.plot(X[:, 0], y, 'bo')
     plt.plot(X[:, 0], model_curve3, 'r-', linewidth=3)
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.title('Modelo de Regresión Polinomial de mejor grado')
+    plt.title('Modelo de Regresión Polinomial de mejor grado '+str(bestdegree))
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()
 
-    return [graph1, graph2, graph3, graph4, graph5], errors, [str(mse), str(rmse), str(r2)]
+    return [graph1, graph2, graph3, graph4, graph5], errors, [str(round(mse, 5)), str(round(rmse, 5)), str(round(r2, 5))], eq

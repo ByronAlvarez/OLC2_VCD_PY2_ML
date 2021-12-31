@@ -60,7 +60,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="param3" class="form-label">Columna de Casos:</label>
+                <label for="param3" class="form-label">Columna de Infectados:</label>
                 <select class="form-select" name="param3" id="param3">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
@@ -77,7 +77,7 @@
 
 
 
-    <h1 class="mt-4">Tendencia de la infección por Covid-19 en un País</h1>
+    <h1 class="mt-4">Tendencia del número de infectados por día de un País</h1>
     <hr class="mt-0 mb-4">
     {% if graphs %}
     <div>
