@@ -11,7 +11,7 @@ import urllib
 import csv
 import json
 import pandas
-from .ml_model.tendencia_infeccion_pais import getGraph
+from .ml_model.tendencia_infeccion_pais import getGraph, getGraph2
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import A4, letter
@@ -30,6 +30,7 @@ parameters = []
 
 tempPais = ""
 tempDepa = ""
+paisNN = ""
 auxG = None
 metricsG = None
 coefsG = None
@@ -85,7 +86,7 @@ def tendencia_casos_depa(request):
         pais = request.POST.get("paisesS")
         depa = request.POST.get("depaS")
         paisN = request.POST.get("paisN")
-        param1 = request.POST.get("param1")
+        depaa = request.POST.get("depaa")
         param2 = request.POST.get("param2")
         param3 = request.POST.get("param3")
         if pais and depa:
@@ -109,18 +110,20 @@ def tendencia_casos_depa(request):
             errors = []
             coefs = ""
             metrics = ""
+            global paisNN
+            paisNN = paisN
             for rows in jsonArray:
                 if rows[tempPais] == paisN:
                     if not(rows[tempDepa] in depas):
                         depas.append(rows[tempDepa])
 
-        elif param1 and param2 and param3:
+        elif depaa and param2 and param3:
             global parameters
             parameters = []
             parameters.append(param2)
             parameters.append(param3)
-            graphs, errors, metrics, coefs = getGraph(param2, tempPais, param3,
-                                                      param1, jsonArray)
+            graphs, errors, metrics, coefs = getGraph2(param2, tempPais, tempDepa, param3,
+                                                       paisNN, depaa, jsonArray)
             global auxG
             auxG = graphs
             global errorsT
@@ -131,14 +134,14 @@ def tendencia_casos_depa(request):
             global coefsG
             coefsG = coefs
 
-        return render(request, 'tendencia_casos_depa.html', {'enc': enc, 'parameters': parameters, 'paises': paisess, 'depas': depas, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
+        return render(request, 'tendencias/tendencia_casos_depa.html', {'enc': enc, 'parameters': parameters, 'paises': paisess, 'depas': depas, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
 
     elif request.GET.get('Down') == 'Down':
         return some_view2(request, auxG, errorsT, metricsG, coefsG)
         # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
     else:
 
-        return render(request, 'tendencia_casos_depa.html', {'enc': enc, 'parameters': parameters, 'paises': paisess})
+        return render(request, 'tendencias/tendencia_casos_depa.html', {'enc': enc, 'parameters': parameters, 'paises': paisess})
 
 
 def tendencia_vacuancion_pais(request):
@@ -170,7 +173,6 @@ def tendencia_vacuancion_pais(request):
             parameters = []
             parameters.append(param2)
             parameters.append(param3)
-            print(tempPais)
             graphs, errors, metrics, coefs = getGraph(param2, tempPais, param3,
                                                       param1, jsonArray)
             global auxG
@@ -183,14 +185,14 @@ def tendencia_vacuancion_pais(request):
             global coefsG
             coefsG = coefs
 
-        return render(request, 'tendencia_vacuancion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
+        return render(request, 'tendencias/tendencia_vacuancion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
 
     elif request.GET.get('Down') == 'Down':
         return some_view2(request, auxG, errorsT, metricsG, coefsG)
         # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
     else:
 
-        return render(request, 'tendencia_vacuancion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+        return render(request, 'tendencias/tendencia_vacuancion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
 
 
 def tendencia_infecxdia_pais(request):
@@ -222,7 +224,6 @@ def tendencia_infecxdia_pais(request):
             parameters = []
             parameters.append(param2)
             parameters.append(param3)
-            print(tempPais)
             graphs, errors, metrics, coefs = getGraph(param2, tempPais, param3,
                                                       param1, jsonArray)
             global auxG
@@ -235,14 +236,14 @@ def tendencia_infecxdia_pais(request):
             global coefsG
             coefsG = coefs
 
-        return render(request, 'tendencia_infecxdia_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
+        return render(request, 'tendencias/tendencia_infecxdia_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
 
     elif request.GET.get('Down') == 'Down':
         return some_view2(request, auxG, errorsT, metricsG, coefsG)
         # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
     else:
 
-        return render(request, 'tendencia_infecxdia_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+        return render(request, 'tendencias/tendencia_infecxdia_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
 
 
 def tendencia_infeccion_pais(request):
@@ -274,7 +275,6 @@ def tendencia_infeccion_pais(request):
             parameters = []
             parameters.append(param2)
             parameters.append(param3)
-            print(tempPais)
             graphs, errors, metrics, coefs = getGraph(param2, tempPais, param3,
                                                       param1, jsonArray)
             global auxG
@@ -287,14 +287,14 @@ def tendencia_infeccion_pais(request):
             global coefsG
             coefsG = coefs
 
-        return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
+        return render(request, 'tendencias/tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs})
 
     elif request.GET.get('Down') == 'Down':
         return some_view2(request, auxG, errorsT, metricsG, coefsG)
         # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
     else:
 
-        return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+        return render(request, 'tendencias/tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
 
 
 def some_view2(request, graphs, errorsT, metrics, coefs):

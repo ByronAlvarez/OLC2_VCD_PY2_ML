@@ -71,8 +71,8 @@
         {% csrf_token %}
         <div class="row mt-3">
             <div class="col-md-4">
-                <label for="param1" class="form-label">Departamento en Especifico:</label>
-                <select class="form-select" name="param1" id="param1">
+                <label for="depaa" class="form-label">Departamento en Especifico:</label>
+                <select class="form-select" name="depaa" id="depaa">
                     {% for item in depas %}
                     <option value="{{ item }}">{{item}}</option>
                     {% endfor %}
