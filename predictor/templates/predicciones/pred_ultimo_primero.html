@@ -60,7 +60,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="columnaInfectados" class="form-label">Columna de Fallecidos:</label>
+                <label for="columnaInfectados" class="form-label">Columna de Casos:</label>
                 <select class="form-select" name="columnaInfectados" id="columnaInfectados">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
@@ -68,13 +68,6 @@
 
                 </select>
             </div>
-            <div class="col-md-4">
-                <label for="valorPrediccion">Valor a Futuro:</label>
-                <input type="number" class="form-control" id="valorPrediccion" name="valorPrediccion" min="1" max="365"
-                    placeholder=1>
-
-            </div>
-
 
         </div>
         <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Param</button></div>
@@ -83,7 +76,7 @@
 
 
 
-    <h1 class="mt-4">Predicción de Infectados en un País</h1>
+    <h1 class="mt-4">Predicción de muertes en el último día del primer año de infecciones en un país</h1>
     <hr class="mt-0 mb-4">
     {% if graphs %}
     <div>

@@ -60,8 +60,17 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="columnaInfectados" class="form-label">Columna de Fallecidos:</label>
+                <label for="columnaInfectados" class="form-label">Columna de Casos:</label>
                 <select class="form-select" name="columnaInfectados" id="columnaInfectados">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="columnaDeath" class="form-label">Columna de Fallecimientos:</label>
+                <select class="form-select" name="columnaDeath" id="columnaDeath">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
                     {% endfor %}
@@ -71,7 +80,7 @@
             <div class="col-md-4">
                 <label for="valorPrediccion">Valor a Futuro:</label>
                 <input type="number" class="form-control" id="valorPrediccion" name="valorPrediccion" min="1" max="365"
-                    placeholder=1>
+                    value=1>
 
             </div>
 
@@ -83,7 +92,7 @@
 
 
 
-    <h1 class="mt-4">Predicción de Infectados en un País</h1>
+    <h1 class="mt-4">Predicciones de casos y muertes en todo el mundo - Neural Network MLPRegressor</h1>
     <hr class="mt-0 mb-4">
     {% if graphs %}
     <div>
@@ -94,6 +103,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-6">
+            <h4 class="mt-4">Tabla de Errores de Casos :</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -110,29 +120,62 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <h4 class="mt-4">Tabla de Errores de Muertes:</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Grado</th>
+                        <th scope="col">RMSE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in errors2 %}
+                    <tr>
+                        <td>{{item.0}}</td>
+                        <td>{{item.1}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <h4 class="mt-4">La prediccion del modelo polinomial es de :</h4>
+    <h4 class="mt-4">La prediccion del modelo polinomial de Casos es de :</h4>
     <hr class="mt-0 mb-4">
 
     <p class="fs-6"> {{valorPred.0.0}}</p>
+    <h4 class="mt-4">La prediccion del modelo polinomial de Deaths es de :</h4>
+    <hr class="mt-0 mb-4">
 
-    <h4 class="mt-4">La prediccion del modelo lineal es de :</h4>
+    <p class="fs-6"> {{valorPredD.0.0}}</p>
+
+    <h4 class="mt-4">La prediccion del modelo lineal de Casos es de :</h4>
     <hr class="mt-0 mb-4">
 
     <p class="fs-6"> {{valorPred.1.0}}</p>
+    <h4 class="mt-4">La prediccion del modelo lineal de Deaths es de :</h4>
+    <hr class="mt-0 mb-4">
 
-    <h4 class="mt-4">Ecuacion Polinomial</h4>
+    <p class="fs-6"> {{valorPredD.1.0}}</p>
+
+    <h4 class="mt-4">Ecuacion Polinomial de Casos</h4>
     <hr class="mt-0 mb-4">
 
     <p class="fs-6"> {{coefs.0}}</p>
-    <h4 class="mt-4">Ecuacion Lineal</h4>
+    <h4 class="mt-4">Ecuacion Lineal de Casos</h4>
     <hr class="mt-0 mb-4">
 
     <p class="fs-6"> {{coefs.1}}</p>
+    <h4 class="mt-4">Ecuacion Polinomial de Deaths</h4>
+    <hr class="mt-0 mb-4">
 
-    <h4 class="mt-4">Calculos Metricos Polinomiales</h4>
+    <p class="fs-6"> {{coefs2.0}}</p>
+    <h4 class="mt-4">Ecuacion Lineal de Deaths</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6"> {{coefs2.1}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Polinomiales de Casos</h4>
     <hr class="mt-0 mb-4">
 
     <p class="fs-6">Error Cuadrático Medio (MSE) = {{metrics.0}}</p>
@@ -141,7 +184,16 @@
 
     <p class="fs-6">Coeficiente de Determinación R2 = {{metrics.2}}</p>
 
-    <h4 class="mt-4">Calculos Metricos Lineales</h4>
+    <h4 class="mt-4">Calculos Metricos Polinomiales de Deaths</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metrics2.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metrics2.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metrics2.2}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Lineales de Casos</h4>
     <hr class="mt-0 mb-4">
 
     <p class="fs-6">Error Cuadrático Medio (MSE) = {{metricsL.0}}</p>
@@ -149,6 +201,15 @@
     <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metricsL.1}}</p>
 
     <p class="fs-6">Coeficiente de Determinación R2 = {{metricsL.2}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Lineales de Deaths</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metricsLD.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metricsLD.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metricsLD.2}}</p>
 
 
     <form action="" method="get">
