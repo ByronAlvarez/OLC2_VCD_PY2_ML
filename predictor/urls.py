@@ -19,7 +19,9 @@ urlpatterns = [
     path('pred_mortalidad_depa/', views.pred_mortalidad_depa),
     path('pred_casos_muertes/', views.pred_casos_muertes),
     path('pred_casos_dia/', views.pred_casos_dia),
-
+    path('comp_casos_pruebas/', views.comp_casos_pruebas),
+    path('comp_2omas/', views.comp_2omas),
+    path('comp_vac/', views.comp_vac),
 
 
 

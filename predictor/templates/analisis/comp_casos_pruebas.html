@@ -37,23 +37,13 @@
         </div>
         <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Columna de Paises</button></div>
     </form>
-
     <h5 class="mt-2">Seleción de Parametros</h5>
     <form action="" method="post">
         {% csrf_token %}
         <div class="row mt-3">
             <div class="col-md-4">
-                <label for="paisEspecifico" class="form-label">País1 en Especifico:</label>
+                <label for="paisEspecifico" class="form-label">País en Especifico:</label>
                 <select class="form-select" name="paisEspecifico" id="paisEspecifico">
-                    {% for item in paises %}
-                    <option value="{{ item }}">{{item}}</option>
-                    {% endfor %}
-
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="pais2Especifico" class="form-label">País2 en Especifico:</label>
-                <select class="form-select" name="pais2Especifico" id="pais2Especifico">
                     {% for item in paises %}
                     <option value="{{ item }}">{{item}}</option>
                     {% endfor %}
@@ -70,8 +60,17 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="columnaInfectados" class="form-label">Columna de Vacunacion:</label>
+                <label for="columnaInfectados" class="form-label">Columna de Casos:</label>
                 <select class="form-select" name="columnaInfectados" id="columnaInfectados">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="columnaDeath" class="form-label">Columna de Pruebas:</label>
+                <select class="form-select" name="columnaDeath" id="columnaDeath">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
                     {% endfor %}
@@ -87,7 +86,7 @@
 
 
 
-    <h1 class="mt-4">Ánalisis Comparativo entres 2 o más paises o continentes</h1>
+    <h1 class="mt-4">Comparación entre el número de casos detectados y el número de pruebas de un país</h1>
     <hr class="mt-0 mb-4">
     {% if graphs %}
     <div>
@@ -98,8 +97,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-6">
-            {% for country in countries %}
-            <h4 class="mt-4">Tabla de Errores de Casos :{{country.name}}</h4>
+            <h4 class="mt-4">Tabla de Errores de Casos :</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -108,7 +106,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in country.errors %}
+                    {% for item in errors %}
                     <tr>
                         <td>{{item.0}}</td>
                         <td>{{item.1}}</td>
@@ -116,28 +114,73 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% endfor %}
-
+            <h4 class="mt-4">Tabla de Errores de Pruebas:</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Grado</th>
+                        <th scope="col">RMSE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in errors2 %}
+                    <tr>
+                        <td>{{item.0}}</td>
+                        <td>{{item.1}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
-    {% for country in countries %}
-    <h4 class="mt-4">Ecuacion Polinomial de {{country.name}}</h4>
+
+    <h4 class="mt-4">Ecuacion Polinomial de Casos</h4>
     <hr class="mt-0 mb-4">
 
-    <p class="fs-6"> {{country.eq}}</p>
+    <p class="fs-6"> {{coefs}}</p>
 
-    <h4 class="mt-4">Calculos Metricos Polinomiales de {{country.name}}</h4>
+    <h4 class="mt-4">Ecuacion Polinomial de Pruebas</h4>
     <hr class="mt-0 mb-4">
 
-    <p class="fs-6">Error Cuadrático Medio (MSE) = {{country.metrics.0}}</p>
-
-    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{country.metrics.1}}</p>
-
-    <p class="fs-6">Coeficiente de Determinación R2 = {{country.metrics.2}}</p>
-    {% endfor %}
+    <p class="fs-6"> {{coefs2}}</p>
 
 
+    <h4 class="mt-4">Calculos Metricos Polinomiales de Casos</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metrics.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metrics.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metrics.2}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Polinomiales de Deaths</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metrics2.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metrics2.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metrics2.2}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Lineales de Casos</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metricsL.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metricsL.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metricsL.2}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Lineales de Deaths</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metricsLD.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metricsLD.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metricsLD.2}}</p>
 
 
     <form action="" method="get">
