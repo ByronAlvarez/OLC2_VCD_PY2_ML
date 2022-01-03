@@ -22,6 +22,15 @@ urlpatterns = [
     path('comp_casos_pruebas/', views.comp_casos_pruebas),
     path('comp_2omas/', views.comp_2omas),
     path('comp_vac/', views.comp_vac),
+    path('ana_deaths_pais/', views.ana_deaths_pais),
+    path('indice_pand/', views.indice_pand),
+    path('tasa_mortalidad/', views.tasa_mortalidad),
+    path('muertes_region/', views.muertes_region),
+    path('porcentaje_muertes/', views.porcentaje_muertes),
+    path('tasa_casos_muertes/', views.tasa_casos_muertes),
+    path('tasa_casos_casosdia_muertos/', views.tasa_casos_casosdia_muertos),
+
+
 
 
 

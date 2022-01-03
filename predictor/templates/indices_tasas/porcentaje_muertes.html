@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    {% extends 'base.html' %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    <h5 class="mt-2">Seleción de la columna de Pais/Region/Continente </h5>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label for="columnaPais" class="form-label">Columna de Pais:</label>
+                <select class="form-select" name="columnaPais" id="columnaPais">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+        </div>
+        <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Columna de Paises</button></div>
+    </form>
+    <h5 class="mt-2">Seleción de Parametros</h5>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label for="paisEspecifico" class="form-label">Pais/Region/Continente:</label>
+                <select class="form-select" name="paisEspecifico" id="paisEspecifico">
+                    {% for item in paises %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="columnaDeath" class="form-label">Columna de Muertes:</label>
+                <select class="form-select" name="columnaDeath" id="columnaDeath">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="columnaInfectados" class="form-label">Columna de Casos:</label>
+                <select class="form-select" name="columnaInfectados" id="columnaInfectados">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+        </div>
+        <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Param</button></div>
+
+    </form>
+
+
+
+    <h1 class="mt-4">Porcentaje de muertes frente al total de casos en un país, región o continente</h1>
+    <hr class="mt-0 mb-4">
+    {% if graphs %}
+    <div>
+        {% for graph in graphs %}
+        <img src='data:image/png;base64,{{ graph }}'>
+        {% endfor %}
+
+    </div>
+
+
+    <form action="" method="get">
+        <div class="col-12 mt-2 mb-5"><button type="submit" class="btn btn-secondary" value="Down" name="Down">Descargar
+                PDF</button></div>
+    </form>
+    {% endif %}
+
+    {% endblock %}
+
+
+</body>
+
+</html>

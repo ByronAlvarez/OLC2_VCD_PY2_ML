@@ -13,6 +13,7 @@ import pandas
 from .ml_model.tendencia_infeccion_pais import getGraph, getGraph2
 from .ml_model.predicciones import getPrediction, getPredictionLastDay, getPredictionDepa, getDoublePrediction
 from .ml_model.analisis import getComparacion, getComparacion2Paises
+from .ml_model.index_rates import muertes_regionn, porcentaje_muertess, tasa_casos_deaths, tasa_casos_casosA_deaths
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import A4, letter
@@ -89,6 +90,285 @@ def upload(request):
         return render(request, 'upload.html', {'enc': enc, 'data': jsonArray})
 
 
+def tasa_casos_casosdia_muertos(request):
+    # if this is a POST request we need to process the form data
+    paises = []
+    params = []
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        columnaPais = request.POST.get("columnaPais")
+        paisEspecifico = request.POST.get("paisEspecifico")
+        columnaFecha = request.POST.get("columnaFecha")
+        columnaInfectados = request.POST.get("columnaInfectados")
+        columnaAcumulados = request.POST.get("columnaAcumulados")
+        columnaDeath = request.POST.get("columnaDeath")
+        if columnaPais:
+            graphs = []
+            global tempPais
+            tempPais = columnaPais
+            for rows in jsonArray:
+                for key in rows:
+                    if key == columnaPais:
+                        if not(rows[key] in paises):
+                            paises.append(rows[key])
+
+        elif paisEspecifico and columnaFecha and columnaInfectados and columnaDeath and columnaAcumulados:
+
+            graphs = tasa_casos_casosA_deaths(
+                columnaFecha, tempPais, columnaInfectados, columnaAcumulados, columnaDeath, paisEspecifico, jsonArray)
+            global auxG
+            auxG = graphs
+
+        return render(request, 'indices_tasas/tasa_casos_casosdia_muertos.html', {'enc': enc, 'paises': paises, 'graphs': graphs})
+
+    elif request.GET.get('Down') == 'Down':
+
+        return reportPredDouble(request, auxG, errorsT, errorsT2, metricsG, metrics2G, coefsG, coefs2G, valorPredG, valorPred2G, metricsGL, metrics2GL)
+        # return reportPredicciones(request, auxG, errorsT, metricsG, coefsG, valorPredG, metricsGL)
+        # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+    else:
+
+        return render(request, 'indices_tasas/tasa_casos_casosdia_muertos.html', {'enc': enc,  'paises': paises})
+
+
+def tasa_casos_muertes(request):
+    # if this is a POST request we need to process the form data
+    paises = []
+    params = []
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        columnaPais = request.POST.get("columnaPais")
+        paisEspecifico = request.POST.get("paisEspecifico")
+        columnaFecha = request.POST.get("columnaFecha")
+        columnaInfectados = request.POST.get("columnaInfectados")
+        columnaDeath = request.POST.get("columnaDeath")
+        if columnaPais:
+            graphs = []
+            errors = []
+            errors2 = []
+            coefs = ""
+            coefs2 = ""
+            metrics = ""
+            metrics2 = ""
+            global tempPais
+            tempPais = columnaPais
+            for rows in jsonArray:
+                for key in rows:
+                    if key == columnaPais:
+                        if not(rows[key] in paises):
+                            paises.append(rows[key])
+
+        elif paisEspecifico and columnaFecha and columnaInfectados and columnaDeath:
+
+            graphs, errors, errors2, metrics, metrics2, coefs, coefs2 = tasa_casos_deaths(columnaFecha, tempPais, columnaInfectados, columnaDeath,
+                                                                                          paisEspecifico, jsonArray)
+            global auxG
+            auxG = graphs
+            global errorsT
+            errorsT = errors
+            global errorsT2
+            errorsT2 = errors2
+            errorsT2.insert(0, ["Grado", "RMSE"])
+            errorsT.insert(0, ["Grado", "RMSE"])
+            global metricsG
+            metricsG = metrics
+            global metrics2G
+            metrics2G = metrics2
+            global coefsG
+            coefsG = coefs
+            global coefs2G
+            coefs2G = coefs2
+
+        return render(request, 'indices_tasas/tasa_casos_muertes.html', {'enc': enc, 'paises': paises, 'graphs': graphs, 'errors': errors, 'errors2': errors2, 'metrics': metrics, 'metrics2': metrics2, 'coefs': coefs, 'coefs2': coefs2})
+
+    elif request.GET.get('Down') == 'Down':
+
+        return reportPredDouble(request, auxG, errorsT, errorsT2, metricsG, metrics2G, coefsG, coefs2G, valorPredG, valorPred2G, metricsGL, metrics2GL)
+        # return reportPredicciones(request, auxG, errorsT, metricsG, coefsG, valorPredG, metricsGL)
+        # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+    else:
+
+        return render(request, 'indices_tasas/tasa_casos_muertes.html', {'enc': enc,  'paises': paises})
+
+
+def porcentaje_muertes(request):
+    # if this is a POST request we need to process the form data
+    paises = []
+    params = []
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        columnaPais = request.POST.get("columnaPais")
+        paisEspecifico = request.POST.get("paisEspecifico")
+        columnaDeath = request.POST.get("columnaDeath")
+        columnaInfectados = request.POST.get("columnaInfectados")
+        if columnaPais:
+            graphs = []
+            global tempPais
+            tempPais = columnaPais
+            for rows in jsonArray:
+                for key in rows:
+                    if key == columnaPais:
+                        if not(rows[key] in paises):
+                            paises.append(rows[key])
+
+        elif paisEspecifico and columnaDeath and columnaInfectados:
+
+            graphs = porcentaje_muertess(
+                tempPais, columnaInfectados, columnaDeath, paisEspecifico, jsonArray)
+            global auxG
+            auxG = graphs
+
+        return render(request, 'indices_tasas/porcentaje_muertes.html', {'enc': enc, 'paises': paises, 'graphs': graphs})
+
+    elif request.GET.get('Down') == 'Down':
+
+        return some_view2(request, auxG, errorsT, metricsG, coefsG)
+    else:
+
+        return render(request, 'indices_tasas/porcentaje_muertes.html', {'enc': enc,  'paises': paises})
+
+
+def muertes_region(request):
+    # if this is a POST request we need to process the form data
+    paises = []
+    params = []
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        columnaPais = request.POST.get("columnaPais")
+        paisEspecifico = request.POST.get("paisEspecifico")
+        columnaReg = request.POST.get("columnaReg")
+        columnaInfectados = request.POST.get("columnaInfectados")
+        if columnaPais:
+            graphs = []
+            global tempPais
+            tempPais = columnaPais
+            for rows in jsonArray:
+                for key in rows:
+                    if key == columnaPais:
+                        if not(rows[key] in paises):
+                            paises.append(rows[key])
+
+        elif paisEspecifico and columnaReg and columnaInfectados:
+
+            graphs = muertes_regionn(
+                tempPais, columnaReg, columnaInfectados, paisEspecifico, jsonArray)
+            global auxG
+            auxG = graphs
+
+        return render(request, 'indices_tasas/muertes_region.html', {'enc': enc, 'paises': paises, 'graphs': graphs})
+
+    elif request.GET.get('Down') == 'Down':
+
+        return some_view2(request, auxG, errorsT, metricsG, coefsG)
+    else:
+
+        return render(request, 'indices_tasas/muertes_region.html', {'enc': enc,  'paises': paises})
+
+
+def indice_pand(request):
+    # if this is a POST request we need to process the form data
+    paises = []
+    params = []
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        columnaPais = request.POST.get("columnaPais")
+        paisEspecifico = request.POST.get("paisEspecifico")
+        columnaFecha = request.POST.get("columnaFecha")
+        columnaInfectados = request.POST.get("columnaInfectados")
+        if columnaPais:
+            graphs = []
+            errors = []
+            metrics = ""
+            coefs = ""
+            global tempPais
+            tempPais = columnaPais
+            for rows in jsonArray:
+                for key in rows:
+                    if key == columnaPais:
+                        if not(rows[key] in paises):
+                            paises.append(rows[key])
+
+        elif paisEspecifico and columnaFecha and columnaInfectados:
+
+            graphs, errors, metrics, coefs = getGraph(columnaFecha, tempPais, columnaInfectados,
+                                                      paisEspecifico, jsonArray)
+            global auxG
+            auxG = graphs
+            global errorsT
+            errorsT = errors
+            errorsT.insert(0, ["Grado", "RMSE"])
+            global metricsG
+            metricsG = metrics
+            global coefsG
+            coefsG = coefs
+
+        return render(request, 'indices_tasas/indice_pand.html', {'enc': enc, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs, })
+
+    elif request.GET.get('Down') == 'Down':
+
+        return some_view2(request, auxG, errorsT, metricsG, coefsG)
+        # return reportPredicciones(request, auxG, errorsT, metricsG, coefsG, valorPredG, metricsGL)
+        # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+    else:
+
+        return render(request, 'indices_tasas/indice_pand.html', {'enc': enc,  'paises': paises})
+
+
+def tasa_mortalidad(request):
+    # if this is a POST request we need to process the form data
+    paises = []
+    params = []
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        columnaPais = request.POST.get("columnaPais")
+        paisEspecifico = request.POST.get("paisEspecifico")
+        columnaFecha = request.POST.get("columnaFecha")
+        columnaInfectados = request.POST.get("columnaInfectados")
+        if columnaPais:
+            graphs = []
+            errors = []
+            metrics = ""
+            coefs = ""
+            global tempPais
+            tempPais = columnaPais
+            for rows in jsonArray:
+                for key in rows:
+                    if key == columnaPais:
+                        if not(rows[key] in paises):
+                            paises.append(rows[key])
+
+        elif paisEspecifico and columnaFecha and columnaInfectados:
+
+            graphs, errors, metrics, coefs = getGraph(columnaFecha, tempPais, columnaInfectados,
+                                                      paisEspecifico, jsonArray)
+            global auxG
+            auxG = graphs
+            global errorsT
+            errorsT = errors
+            errorsT.insert(0, ["Grado", "RMSE"])
+            global metricsG
+            metricsG = metrics
+            global coefsG
+            coefsG = coefs
+
+        return render(request, 'indices_tasas/tasa_mortalidad.html', {'enc': enc, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs, })
+
+    elif request.GET.get('Down') == 'Down':
+
+        return some_view2(request, auxG, errorsT, metricsG, coefsG)
+        # return reportPredicciones(request, auxG, errorsT, metricsG, coefsG, valorPredG, metricsGL)
+        # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+    else:
+
+        return render(request, 'indices_tasas/tasa_mortalidad.html', {'enc': enc,  'paises': paises})
+
+
 def comp_vac(request):
     # if this is a POST request we need to process the form data
     paises = []
@@ -134,6 +414,56 @@ def comp_vac(request):
     else:
 
         return render(request, 'analisis/comp_vac.html', {'enc': enc,  'paises': paises})
+
+
+def ana_deaths_pais(request):
+    # if this is a POST request we need to process the form data
+    paises = []
+    params = []
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        columnaPais = request.POST.get("columnaPais")
+        paisEspecifico = request.POST.get("paisEspecifico")
+        columnaFecha = request.POST.get("columnaFecha")
+        columnaInfectados = request.POST.get("columnaInfectados")
+        if columnaPais:
+            graphs = []
+            errors = []
+            metrics = ""
+            coefs = ""
+            global tempPais
+            tempPais = columnaPais
+            for rows in jsonArray:
+                for key in rows:
+                    if key == columnaPais:
+                        if not(rows[key] in paises):
+                            paises.append(rows[key])
+
+        elif paisEspecifico and columnaFecha and columnaInfectados:
+
+            graphs, errors, metrics, coefs = getGraph(columnaFecha, tempPais, columnaInfectados,
+                                                      paisEspecifico, jsonArray)
+            global auxG
+            auxG = graphs
+            global errorsT
+            errorsT = errors
+            errorsT.insert(0, ["Grado", "RMSE"])
+            global metricsG
+            metricsG = metrics
+            global coefsG
+            coefsG = coefs
+
+        return render(request, 'analisis/ana_deaths_pais.html', {'enc': enc, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs, })
+
+    elif request.GET.get('Down') == 'Down':
+
+        return some_view2(request, auxG, errorsT, metricsG, coefsG)
+        # return reportPredicciones(request, auxG, errorsT, metricsG, coefsG, valorPredG, metricsGL)
+        # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
+    else:
+
+        return render(request, 'analisis/ana_deaths_pais.html', {'enc': enc,  'paises': paises})
 
 
 def comp_2omas(request):

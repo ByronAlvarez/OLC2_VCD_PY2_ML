@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    {% extends 'base.html' %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    <h5 class="mt-2">Seleción de la columna de Paises </h5>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label for="columnaPais" class="form-label">Columna del País:</label>
+                <select class="form-select" name="columnaPais" id="columnaPais">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+
+        </div>
+        <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Columna de Paises</button></div>
+    </form>
+    <h5 class="mt-2">Seleción de Parametros</h5>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label for="paisEspecifico" class="form-label">País en Especifico:</label>
+                <select class="form-select" name="paisEspecifico" id="paisEspecifico">
+                    {% for item in paises %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="columnaFecha" class="form-label">Columna de Fechas:</label>
+                <select class="form-select" name="columnaFecha" id="columnaFecha">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="columnaInfectados" class="form-label">Columna de Deaths:</label>
+                <select class="form-select" name="columnaInfectados" id="columnaInfectados">
+                    {% for item in enc %}
+                    <option value="{{ item }}">{{item}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+        </div>
+        <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Param</button></div>
+
+    </form>
+
+
+
+    <h1 class="mt-4">Análisis del número de muertes por coronavirus en un País</h1>
+    <hr class="mt-0 mb-4">
+    {% if graphs %}
+    <div>
+        {% for graph in graphs %}
+        <img src='data:image/png;base64,{{ graph }}'>
+        {% endfor %}
+
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Grado</th>
+                        <th scope="col">RMSE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in errors %}
+                    <tr>
+                        <td>{{item.0}}</td>
+                        <td>{{item.1}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <h4 class="mt-4">Ecuacion Lineal</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6"> {{coefs}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Polinomiales</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metrics.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metrics.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metrics.2}}</p>
+
+    <h4 class="mt-4">Calculos Metricos Lineales</h4>
+    <hr class="mt-0 mb-4">
+
+    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metricsL.0}}</p>
+
+    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metricsL.1}}</p>
+
+    <p class="fs-6">Coeficiente de Determinación R2 = {{metricsL.2}}</p>
+
+
+    <form action="" method="get">
+        <div class="col-12 mt-2 mb-5"><button type="submit" class="btn btn-secondary" value="Down" name="Down">Descargar
+                PDF</button></div>
+    </form>
+    {% endif %}
+
+    {% endblock %}
+
+
+</body>
+
+</html>

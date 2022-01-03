@@ -29,6 +29,9 @@ def getGraph(date, country, cases, countryName, csv):
 
     dataset = pd.DataFrame(csv, columns=col_list)
 
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[cases], inplace=True)
+
     dataset[cases] = pd.to_numeric(dataset[cases])
 
     #dataset = pd.read_csv(csv, usecols=col_list)
@@ -46,7 +49,7 @@ def getGraph(date, country, cases, countryName, csv):
     y = xx.iloc[:, pos2].values
 
     fig = plt.figure()
-
+    plt.style.use('dark_background')
     plt.scatter(X, y, color="red")
     plt.grid()
     plt.xlabel('X')
@@ -62,7 +65,7 @@ def getGraph(date, country, cases, countryName, csv):
 
     model_curve = model.predict(X)
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'ko')
+    plt.plot(X[:, 0], y, 'o', color="lightcoral")
     plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel('x')
@@ -153,6 +156,8 @@ def getGraph2(date, country, department, cases, countryName, depaName, csv):
     col_list = [date, country, department, cases]
 
     dataset = pd.DataFrame(csv, columns=col_list)
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[cases], inplace=True)
 
     dataset[cases] = pd.to_numeric(dataset[cases])
 
@@ -174,7 +179,7 @@ def getGraph2(date, country, department, cases, countryName, depaName, csv):
     y = xx.iloc[:, pos2].values
 
     fig = plt.figure()
-
+    plt.style.use('dark_background')
     plt.scatter(X, y, color="red")
     plt.grid()
     plt.xlabel('X')

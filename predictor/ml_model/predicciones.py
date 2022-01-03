@@ -25,6 +25,8 @@ def getPrediction(date, country, cases, countryName, csv, tiempoPred):
     col_list = [date, country, cases]
 
     dataset = pd.DataFrame(csv, columns=col_list)
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[cases], inplace=True)
 
     dataset[cases] = pd.to_numeric(dataset[cases])
 
@@ -38,7 +40,7 @@ def getPrediction(date, country, cases, countryName, csv, tiempoPred):
     y = xx.iloc[:, pos2].values
 
     fig = plt.figure()
-
+    plt.style.use('dark_background')
     plt.scatter(X, y, color="red")
     plt.grid()
     plt.xlabel('X')
@@ -196,6 +198,9 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
     col_list = [date, country, cases, deaths]
 
     dataset = pd.DataFrame(csv, columns=col_list)
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[deaths], inplace=True)
+    dataset.dropna(subset=[cases], inplace=True)
 
     dataset[cases] = pd.to_numeric(dataset[cases])
     dataset[deaths] = pd.to_numeric(dataset[deaths])
@@ -212,7 +217,7 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
     z = xx.iloc[:, pos3].values
 
     fig = plt.figure()
-
+    plt.style.use('dark_background')
     plt.scatter(X, y, color="red")
     plt.scatter(X, z, color="blue")
     plt.grid()
@@ -429,12 +434,14 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
     col_list = [date, country, department, cases]
 
     dataset = pd.DataFrame(csv, columns=col_list)
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[cases], inplace=True)
 
     dataset[cases] = pd.to_numeric(dataset[cases])
 
     xx = dataset.loc[dataset[country] == countryName]
     xx[date] = xx[date].astype('category').cat.codes
-    print(xx)
+
     pos1 = dataset.columns.get_loc(date)
     pos2 = dataset.columns.get_loc(cases)
 
@@ -445,13 +452,8 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
     X = X.reshape(-1, 1)
     y = xx.iloc[:, pos2].values
 
-    print("XXXXXX")
-    print(X)
-    print("YYYYYY")
-    print(y)
-
     fig = plt.figure()
-
+    plt.style.use('dark_background')
     plt.scatter(X, y, color="red")
     plt.grid()
     plt.xlabel('X')
@@ -609,6 +611,8 @@ def getPredictionLastDay(date, country, cases, countryName, csv):
     col_list = [date, country, cases]
 
     dataset = pd.DataFrame(csv, columns=col_list)
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[cases], inplace=True)
 
     dataset[cases] = pd.to_numeric(dataset[cases])
 
@@ -628,7 +632,7 @@ def getPredictionLastDay(date, country, cases, countryName, csv):
     y = xx.iloc[:, pos2].values
 
     fig = plt.figure()
-
+    plt.style.use('dark_background')
     plt.scatter(X, y, color="red")
     plt.grid()
     plt.xlabel('X')
