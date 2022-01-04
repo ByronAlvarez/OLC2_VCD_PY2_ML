@@ -31,6 +31,7 @@ def getPrediction(date, country, cases, countryName, csv, tiempoPred):
     dataset[cases] = pd.to_numeric(dataset[cases])
 
     xx = dataset.loc[dataset[country] == countryName]
+    auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
     pos1 = dataset.columns.get_loc(date)
@@ -41,11 +42,13 @@ def getPrediction(date, country, cases, countryName, csv, tiempoPred):
 
     fig = plt.figure()
     plt.style.use('dark_background')
-    plt.scatter(X, y, color="red")
+    plt.scatter(auxLabel, y, color="red")
     plt.grid()
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('Ploteo entre X y')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig.savefig(flike)
@@ -61,12 +64,14 @@ def getPrediction(date, country, cases, countryName, csv, tiempoPred):
     r2L = r2_score(y_true=y, y_pred=model_curve)
 
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="mistyrose")
-    plt.plot(X[:, 0], model_curve, '-', color="orangered", linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="mistyrose")
+    plt.plot(auxLabel, model_curve, '-', color="orangered", linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Lineal')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig2.savefig(flike)
@@ -83,12 +88,14 @@ def getPrediction(date, country, cases, countryName, csv, tiempoPred):
     model_curve = model2.predict(x_true_transformed)
 
     fig3 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="lightsteelblue")
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="lightsteelblue")
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig3.savefig(flike)
@@ -134,12 +141,14 @@ def getPrediction(date, country, cases, countryName, csv, tiempoPred):
             eq += " +(" + str(coefs[i])+")x^"+str(i)
 
     fig5 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="lightsteelblue")
-    plt.plot(X[:, 0], model_curve3, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="lightsteelblue")
+    plt.plot(auxLabel, model_curve3, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial de mejor grado '+str(bestdegree))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()
@@ -206,6 +215,7 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
     dataset[deaths] = pd.to_numeric(dataset[deaths])
 
     xx = dataset.loc[dataset[country] == countryName]
+    auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
     pos1 = dataset.columns.get_loc(date)
@@ -218,13 +228,15 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
 
     fig = plt.figure()
     plt.style.use('dark_background')
-    plt.scatter(X, y, color="red", label=str(cases))
-    plt.scatter(X, z, color="blue", label=str(deaths))
+    plt.scatter(auxLabel, y, color="red", label=str(cases))
+    plt.scatter(auxLabel, z, color="blue", label=str(deaths))
     plt.grid()
     plt.xlabel('X')
     plt.ylabel('y')
     plt.legend()
     plt.title('Ploteo entre X y')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig.savefig(flike)
@@ -249,15 +261,17 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
     r2LD = r2_score(y_true=z, y_pred=model_curveDD)
 
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="mistyrose")
-    plt.plot(X[:, 0], z, 'o', color="lightsteelblue")
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3, label=str(cases))
-    plt.plot(X[:, 0], model_curveDD, 'b-', linewidth=3, label=str(deaths))
+    plt.plot(auxLabel, y, 'o', color="mistyrose")
+    plt.plot(auxLabel, z, 'o', color="lightsteelblue")
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3, label=str(cases))
+    plt.plot(auxLabel, model_curveDD, 'b-', linewidth=3, label=str(deaths))
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.legend()
     plt.title('Modelo de Regresión Lineal')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig2.savefig(flike)
@@ -279,15 +293,17 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
     model_curveDD = model2DD.predict(x_true_transformed)
 
     fig3 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="mistyrose")
-    plt.plot(X[:, 0], z, 'o', color="lightsteelblue")
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3, label=str(cases))
-    plt.plot(X[:, 0], model_curveDD, 'b-', linewidth=3, label=str(deaths))
+    plt.plot(auxLabel, y, 'o', color="mistyrose")
+    plt.plot(auxLabel, z, 'o', color="lightsteelblue")
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3, label=str(cases))
+    plt.plot(auxLabel, model_curveDD, 'b-', linewidth=3, label=str(deaths))
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.legend()
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig3.savefig(flike)
@@ -355,16 +371,18 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
             eqD += " +(" + str(coefsD[i])+")x^"+str(i)
 
     fig5 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="mistyrose")
-    plt.plot(X[:, 0], z, 'o', color="lightsteelblue")
-    plt.plot(X[:, 0], model_curve3, 'r-', linewidth=3, label=str(cases))
-    plt.plot(X[:, 0], model_curve3DD, 'b-', linewidth=3, label=str(deaths))
+    plt.plot(auxLabel, y, 'o', color="mistyrose")
+    plt.plot(auxLabel, z, 'o', color="lightsteelblue")
+    plt.plot(auxLabel, model_curve3, 'r-', linewidth=3, label=str(cases))
+    plt.plot(auxLabel, model_curve3DD, 'b-', linewidth=3, label=str(deaths))
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.legend()
     plt.title('Modelo de Regresión Polinomial y Lineal de mejor grado ' +
               str(bestdegree) + "and" + str(bestdegree2))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()
@@ -448,6 +466,7 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
     dataset[cases] = pd.to_numeric(dataset[cases])
 
     xx = dataset.loc[dataset[country] == countryName]
+    auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
     pos1 = dataset.columns.get_loc(date)
@@ -462,11 +481,13 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
 
     fig = plt.figure()
     plt.style.use('dark_background')
-    plt.scatter(X, y, color="red")
+    plt.scatter(auxLabel, y, color="red")
     plt.grid()
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('Ploteo entre X y')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig.savefig(flike)
@@ -482,12 +503,14 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
     r2L = r2_score(y_true=y, y_pred=model_curve)
 
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="mistyrose")
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="mistyrose")
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Lineal')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig2.savefig(flike)
@@ -504,12 +527,14 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
     model_curve = model2.predict(x_true_transformed)
 
     fig3 = plt.figure()
-    plt.plot(X[:, 0], y, 'bo')
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'bo')
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig3.savefig(flike)
@@ -555,12 +580,14 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
             eq += " +(" + str(coefs[i])+")x^"+str(i)
 
     fig5 = plt.figure()
-    plt.plot(X[:, 0], y, 'bo')
-    plt.plot(X[:, 0], model_curve3, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'bo')
+    plt.plot(auxLabel, model_curve3, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial de mejor grado '+str(bestdegree))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()
@@ -630,7 +657,7 @@ def getPredictionLastDay(date, country, cases, countryName, csv):
 
     minaño = pd.DatetimeIndex(xx[date]).is_year_end
     res = [i for i, val in enumerate(minaño) if val and años[i] == min(años)]
-
+    auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
     pos1 = dataset.columns.get_loc(date)
@@ -661,12 +688,14 @@ def getPredictionLastDay(date, country, cases, countryName, csv):
     r2L = r2_score(y_true=y, y_pred=model_curve)
 
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="mistyrose")
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="mistyrose")
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Lineal')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig2.savefig(flike)
@@ -683,12 +712,14 @@ def getPredictionLastDay(date, country, cases, countryName, csv):
     model_curve = model2.predict(x_true_transformed)
 
     fig3 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="lightsteelblue")
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="lightsteelblue")
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig3.savefig(flike)
@@ -734,12 +765,14 @@ def getPredictionLastDay(date, country, cases, countryName, csv):
             eq += " +(" + str(coefs[i])+")x^"+str(i)
 
     fig5 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="lightsteelblue")
-    plt.plot(X[:, 0], model_curve3, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="lightsteelblue")
+    plt.plot(auxLabel, model_curve3, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial de mejor grado '+str(bestdegree))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()

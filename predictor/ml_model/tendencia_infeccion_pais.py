@@ -37,12 +37,19 @@ def getGraph(date, country, cases, countryName, csv):
     #dataset = pd.read_csv(csv, usecols=col_list)
 
     xx = dataset.loc[dataset[country] == countryName]
+
+    # ----------
+
+    # ------------
+    #xx[date] = pd.DatetimeIndex(xx[date])
+    auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
     pos1 = dataset.columns.get_loc(date)
     pos2 = dataset.columns.get_loc(cases)
 
     X = xx.iloc[:, pos1].values
+    #X = np.asarray(xx[date]).reshape(-1, 1)
     X = X.reshape(-1, 1)
 
     #yy = dataset.loc[dataset[country] == countryName]
@@ -50,11 +57,13 @@ def getGraph(date, country, cases, countryName, csv):
 
     fig = plt.figure()
     plt.style.use('dark_background')
-    plt.scatter(X, y, color="red")
+    plt.scatter(auxLabel, y, color="red")
     plt.grid()
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('Ploteo entre X y')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig.savefig(flike)
@@ -65,12 +74,14 @@ def getGraph(date, country, cases, countryName, csv):
 
     model_curve = model.predict(X)
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color="lightcoral")
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'o', color="lightcoral")
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Modelo de Regresión Lineal')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig2.savefig(flike)
@@ -87,12 +98,14 @@ def getGraph(date, country, cases, countryName, csv):
     model_curve = model2.predict(x_true_transformed)
 
     fig3 = plt.figure()
-    plt.plot(X[:, 0], y, 'bo')
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'bo')
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig3.savefig(flike)
@@ -137,12 +150,14 @@ def getGraph(date, country, cases, countryName, csv):
             eq += " +(" + str(coefs[i])+")x^"+str(i)
 
     fig5 = plt.figure()
-    plt.plot(X[:, 0], y, 'bo')
-    plt.plot(X[:, 0], model_curve3, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'bo')
+    plt.plot(auxLabel, model_curve3, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Modelo de Regresión Polinomial de mejor grado '+str(bestdegree))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()
@@ -164,6 +179,9 @@ def getGraph2(date, country, department, cases, countryName, depaName, csv):
     #dataset = pd.read_csv(csv, usecols=col_list)
 
     xx = dataset.loc[dataset[country] == countryName]
+
+    #xx[date] = pd.DatetimeIndex(xx[date])
+    auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
     pos1 = dataset.columns.get_loc(date)
@@ -180,11 +198,13 @@ def getGraph2(date, country, department, cases, countryName, depaName, csv):
 
     fig = plt.figure()
     plt.style.use('dark_background')
-    plt.scatter(X, y, color="red")
+    plt.scatter(auxLabel, y, color="red")
     plt.grid()
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('Ploteo entre X y')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig.savefig(flike)
@@ -195,12 +215,14 @@ def getGraph2(date, country, department, cases, countryName, depaName, csv):
 
     model_curve = model.predict(X)
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'ko')
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'bo')
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Modelo de Regresión Lineal')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig2.savefig(flike)
@@ -217,12 +239,14 @@ def getGraph2(date, country, department, cases, countryName, depaName, csv):
     model_curve = model2.predict(x_true_transformed)
 
     fig3 = plt.figure()
-    plt.plot(X[:, 0], y, 'bo')
-    plt.plot(X[:, 0], model_curve, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'bo')
+    plt.plot(auxLabel, model_curve, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig3.savefig(flike)
@@ -267,12 +291,14 @@ def getGraph2(date, country, department, cases, countryName, depaName, csv):
             eq += " +(" + str(coefs[i])+")x^"+str(i)
 
     fig5 = plt.figure()
-    plt.plot(X[:, 0], y, 'bo')
-    plt.plot(X[:, 0], model_curve3, 'r-', linewidth=3)
+    plt.plot(auxLabel, y, 'bo')
+    plt.plot(auxLabel, model_curve3, 'r-', linewidth=3)
     plt.grid()
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Modelo de Regresión Polinomial de mejor grado '+str(bestdegree))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()

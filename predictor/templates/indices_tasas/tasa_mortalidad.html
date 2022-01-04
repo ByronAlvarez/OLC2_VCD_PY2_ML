@@ -50,7 +50,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="columnaFecha" class="form-label">Columna de Fechas:</label>
+                <label for="columnaFecha" class="form-label">Columna de Poblacion:</label>
                 <select class="form-select" name="columnaFecha" id="columnaFecha">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
@@ -106,21 +106,6 @@
     </div>
 
 
-    <h4 class="mt-4">Ecuacion Polinomial</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6"> {{coefs}}</p>
-
-    <h4 class="mt-4">Calculos Metricos Polinomiales</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metrics.0}}</p>
-
-    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metrics.1}}</p>
-
-    <p class="fs-6">Coeficiente de Determinación R2 = {{metrics.2}}</p>
-
-    <p class="fs-6">Tasa de Mortalidad = {{metrics.3}}</p>
 
 
     <form action="" method="get">

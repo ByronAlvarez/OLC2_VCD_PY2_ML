@@ -13,7 +13,7 @@ import pandas
 from .ml_model.tendencia_infeccion_pais import getGraph, getGraph2
 from .ml_model.predicciones import getPrediction, getPredictionLastDay, getPredictionDepa, getDoublePrediction
 from .ml_model.analisis import getComparacion, getComparacion2Paises
-from .ml_model.index_rates import muertes_regionn, porcentaje_muertess, tasa_casos_deaths, tasa_casos_casosA_deaths, porcentaje_edades, porcentaje_men
+from .ml_model.index_rates import muertes_regionn, porcentaje_muertess, tasa_casos_deaths, tasa_casos_casosA_deaths, porcentaje_edades, porcentaje_men, mortalidad, cases_deaths_rate
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import A4, letter
@@ -304,7 +304,6 @@ def tasa_casos_casosdia_muertos(request):
         paisEspecifico = request.POST.get("paisEspecifico")
         columnaFecha = request.POST.get("columnaFecha")
         columnaInfectados = request.POST.get("columnaInfectados")
-        columnaAcumulados = request.POST.get("columnaAcumulados")
         columnaDeath = request.POST.get("columnaDeath")
 
         if columnaPais:
@@ -317,18 +316,18 @@ def tasa_casos_casosdia_muertos(request):
                         if not(rows[key] in paises):
                             paises.append(rows[key])
 
-        elif paisEspecifico and columnaFecha and columnaInfectados and columnaDeath and columnaAcumulados:
+        elif paisEspecifico and columnaFecha and columnaInfectados and columnaDeath:
             global auxG
             try:
                 graphs = tasa_casos_casosA_deaths(
-                    columnaFecha, tempPais, columnaInfectados, columnaAcumulados, columnaDeath, paisEspecifico, jsonArray)
+                    columnaFecha, tempPais, columnaInfectados, columnaDeath, paisEspecifico, jsonArray)
                 auxG = graphs
                 messages.success(request, "La data se analizo correctamente")
             except:
                 messages.error(request, "Alguno de los campos posee un error")
                 return render(request, 'indices_tasas/tasa_casos_casosdia_muertos.html', {'enc': enc,  'paises': paises})
 
-        elif not columnaPais or not paisEspecifico or not columnaFecha or not columnaInfectados or not columnaAcumulados or not columnaDeath:
+        elif not columnaPais or not paisEspecifico or not columnaFecha or not columnaInfectados or not columnaDeath:
             messages.error(request, "Alguno de los campos posee un error")
             return render(request, 'indices_tasas/tasa_casos_casosdia_muertos.html', {'enc': enc,  'paises': paises})
 
@@ -336,7 +335,7 @@ def tasa_casos_casosdia_muertos(request):
 
     elif request.GET.get('Down') == 'Down':
 
-        return reportTresG(request, auxG)
+        return reportPie(request, auxG)
     else:
 
         return render(request, 'indices_tasas/tasa_casos_casosdia_muertos.html', {'enc': enc,  'paises': paises})
@@ -370,7 +369,7 @@ def tasa_casos_muertes(request):
                         if not(rows[key] in paises):
                             paises.append(rows[key])
 
-        elif paisEspecifico and columnaFecha and columnaInfectados and columnaDeath:
+        elif paisEspecifico and columnaInfectados and columnaDeath and columnaFecha:
             global auxG
             global errorsT
             global errorsT2
@@ -379,31 +378,23 @@ def tasa_casos_muertes(request):
             global coefsG
             global coefs2G
             try:
-                graphs, errors, errors2, metrics, metrics2, coefs, coefs2 = tasa_casos_deaths(columnaFecha, tempPais, columnaInfectados, columnaDeath,
-                                                                                              paisEspecifico, jsonArray)
+                graphs = cases_deaths_rate(
+                    tempPais, columnaFecha, columnaInfectados, columnaDeath, paisEspecifico, jsonArray)
                 auxG = graphs
-                errorsT = errors
-                errorsT2 = errors2
-                errorsT2.insert(0, ["Grado", "RMSE"])
-                errorsT.insert(0, ["Grado", "RMSE"])
-                metricsG = metrics
-                metrics2G = metrics2
-                coefsG = coefs
-                coefs2G = coefs2
                 messages.success(request, "Se analizo la data correctamente")
             except:
                 messages.error(request, "Alguno de los campos posee un error")
                 return render(request, 'indices_tasas/tasa_casos_muertes.html', {'enc': enc,  'paises': paises})
 
-        elif not columnaPais or not paisEspecifico or not columnaFecha or not columnaInfectados or not columnaDeath:
+        elif not columnaPais or not paisEspecifico or not columnaInfectados or not columnaDeath and not columnaFecha:
             messages.error(request, "Alguno de los campos posee un error")
             return render(request, 'indices_tasas/tasa_casos_muertes.html', {'enc': enc,  'paises': paises})
 
-        return render(request, 'indices_tasas/tasa_casos_muertes.html', {'enc': enc, 'paises': paises, 'graphs': graphs, 'errors': errors, 'errors2': errors2, 'metrics': metrics, 'metrics2': metrics2, 'coefs': coefs, 'coefs2': coefs2})
+        return render(request, 'indices_tasas/tasa_casos_muertes.html', {'enc': enc, 'paises': paises, 'graphs': graphs})
 
     elif request.GET.get('Down') == 'Down':
 
-        return reportTasas(request, auxG, errorsT, errorsT2, metricsG, metrics2G, coefsG, coefs2G)
+        return reportPie(request, auxG)
         # return reportPredicciones(request, auxG, errorsT, metricsG, coefsG, valorPredG, metricsGL)
         # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
     else:
@@ -587,18 +578,15 @@ def tasa_mortalidad(request):
                             paises.append(rows[key])
 
         elif paisEspecifico and columnaFecha and columnaInfectados:
+            global auxG
             try:
-                global auxG
+
                 global errorsT
                 global metricsG
                 global coefsG
-                graphs, errors, metrics, coefs = getGraph(columnaFecha, tempPais, columnaInfectados,
-                                                          paisEspecifico, jsonArray)
+                graphs = mortalidad(tempPais, columnaInfectados, columnaFecha,
+                                    paisEspecifico, jsonArray)
                 auxG = graphs
-                errorsT = errors
-                errorsT.insert(0, ["Grado", "RMSE"])
-                metricsG = metrics
-                coefsG = coefs
                 messages.success(
                     request, "La inofrmacion se analizo correctamente")
             except:
@@ -609,11 +597,11 @@ def tasa_mortalidad(request):
             messages.error(request, "Alguno de los campos posee un error")
             return render(request, 'indices_tasas/tasa_mortalidad.html', {'enc': enc,  'paises': paises})
 
-        return render(request, 'indices_tasas/tasa_mortalidad.html', {'enc': enc, 'paises': paises, 'graphs': graphs, 'errors': errors, 'metrics': metrics, 'coefs': coefs, })
+        return render(request, 'indices_tasas/tasa_mortalidad.html', {'enc': enc, 'paises': paises, 'graphs': graphs})
 
     elif request.GET.get('Down') == 'Down':
 
-        return some_view2(request, auxG, errorsT, metricsG, coefsG)
+        return reportPie(request, auxG)
         # return reportPredicciones(request, auxG, errorsT, metricsG, coefsG, valorPredG, metricsGL)
         # return render(request, 'tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
     else:

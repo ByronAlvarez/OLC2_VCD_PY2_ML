@@ -52,6 +52,7 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     dataset[deaths] = pd.to_numeric(dataset[deaths])
 
     xx = dataset.loc[dataset[country] == countryName]
+    auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
     pos1 = dataset.columns.get_loc(date)
@@ -65,12 +66,16 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     fig = plt.figure()
     plt.style.use('dark_background')
 
-    plt.scatter(X, y, color=random.choice(colors), alpha=0.5, label=cases)
-    plt.scatter(X, z, color=random.choice(colors), alpha=0.5, label=deaths)
+    plt.scatter(auxLabel, y, color=random.choice(
+        colors), alpha=0.5, label=cases)
+    plt.scatter(auxLabel, z, color=random.choice(
+        colors), alpha=0.5, label=deaths)
     plt.grid()
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('Ploteo entre X y')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig.savefig(flike)
@@ -95,9 +100,9 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     r2LD = r2_score(y_true=z, y_pred=model_curveDD)
 
     fig2 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color=random.choice(colors))
-    plt.plot(X[:, 0], z, 'o', color=random.choice(colors))
-    plt.plot(X[:, 0], model_curve, '-',
+    plt.plot(auxLabel, y, 'o', color=random.choice(colors))
+    plt.plot(auxLabel, z, 'o', color=random.choice(colors))
+    plt.plot(auxLabel, model_curve, '-',
              color=random.choice(colors), linewidth=3)
     plt.plot(X[:, 0], model_curveDD, '-',
              color=random.choice(colors), linewidth=3)
@@ -105,6 +110,8 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Lineal')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig2.savefig(flike)
@@ -126,16 +133,18 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     model_curveDD = model2DD.predict(x_true_transformed)
 
     fig3 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color=random.choice(colors))
-    plt.plot(X[:, 0], z, 'o', color=random.choice(colors))
-    plt.plot(X[:, 0], model_curve, '-',
+    plt.plot(auxLabel, y, 'o', color=random.choice(colors))
+    plt.plot(auxLabel, z, 'o', color=random.choice(colors))
+    plt.plot(auxLabel, model_curve, '-',
              color=random.choice(colors), linewidth=3)
-    plt.plot(X[:, 0], model_curveDD, '-',
+    plt.plot(auxLabel, model_curveDD, '-',
              color=random.choice(colors), linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
     flike = io.BytesIO()
     fig3.savefig(flike)
@@ -160,6 +169,7 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     plt.ylabel('RMSE')
     plt.legend()
     plt.title('RMSE para diferentes grados de la Regresión Polinomial')
+
     flike = io.BytesIO()
     fig4.savefig(flike)
     graph4 = base64.b64encode(flike.getvalue()).decode()
@@ -205,17 +215,19 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
             eqD += " +(" + str(coefsD[i])+")x^"+str(i)
 
     fig5 = plt.figure()
-    plt.plot(X[:, 0], y, 'o', color=random.choice(colors))
-    plt.plot(X[:, 0], z, 'o', color=random.choice(colors))
-    plt.plot(X[:, 0], model_curve3, '-',
+    plt.plot(auxLabel, y, 'o', color=random.choice(colors))
+    plt.plot(auxLabel, z, 'o', color=random.choice(colors))
+    plt.plot(auxLabel, model_curve3, '-',
              color=random.choice(colors), linewidth=3)
-    plt.plot(X[:, 0], model_curve3DD, '-',
+    plt.plot(auxLabel, model_curve3DD, '-',
              color=random.choice(colors), linewidth=3)
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial y Lineal de mejor grado ' +
               str(bestdegree) + "and" + str(bestdegree2))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     flike = io.BytesIO()
     fig5.savefig(flike)
     graph5 = base64.b64encode(flike.getvalue()).decode()
