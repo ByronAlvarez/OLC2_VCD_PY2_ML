@@ -18,19 +18,11 @@
 
 
     {% block content %}
-    <h5 class="mt-2">Seleción de la columna de Paises </h5>
+    <h5 class="mt-2">Seleción de la columna de Departamentos </h5>
     <form action="" method="post">
         {% csrf_token %}
         <div class="row mt-3">
-            <div class="col-md-4">
-                <label for="columnaPais" class="form-label">Columna del País:</label>
-                <select class="form-select" name="columnaPais" id="columnaPais">
-                    {% for item in enc %}
-                    <option value="{{ item }}">{{item}}</option>
-                    {% endfor %}
 
-                </select>
-            </div>
             <div class="col-md-4">
                 <label for="columnaDepa" class="form-label">Columna del Departamento:</label>
                 <select class="form-select" name="columnaDepa" id="columnaDepa">
@@ -45,25 +37,6 @@
         <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Columnas</button></div>
     </form>
 
-    <h5 class="mt-2">Pais para seleccionar sus Departamentos </h5>
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <label for="paisEspecifico" class="form-label">Nombre del Pais:</label>
-                <select class="form-select" name="paisEspecifico" id="paisEspecifico">
-                    {% for item in paises %}
-                    <option value="{{ item }}">{{item}}</option>
-                    {% endfor %}
-
-                </select>
-            </div>
-
-
-        </div>
-        <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Pais</button>
-        </div>
-    </form>
 
     <h5 class="mt-2">Seleción de Parametros</h5>
     <form action="" method="post">

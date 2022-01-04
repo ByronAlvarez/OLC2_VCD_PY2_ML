@@ -937,7 +937,7 @@ def pred_mortalidad_depa(request):
 
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        columnaPais = request.POST.get("columnaPais")
+
         columnaDepa = request.POST.get("columnaDepa")
         paisEspecifico = request.POST.get("paisEspecifico")
         depaEspecifico = request.POST.get("depaEspecifico")
@@ -945,37 +945,18 @@ def pred_mortalidad_depa(request):
         columnaInfectados = request.POST.get("columnaInfectados")
         valorPrediccion = request.POST.get("valorPrediccion")
 
-        if columnaPais and columnaDepa:
+        if columnaDepa:
             graphs = []
             errors = []
             coefs = ""
             metrics = ""
             valorPred = ""
             metricsL = ""
-            global tempPais
-            tempPais = columnaPais
             global tempDepa
             tempDepa = columnaDepa
             for rows in jsonArray:
-                for key in rows:
-                    if key == columnaPais:
-                        if not(rows[key] in paises):
-                            paises.append(rows[key])
-            global paisess
-            paisess = paises
-        elif paisEspecifico:
-            graphs = []
-            errors = []
-            coefs = ""
-            metrics = ""
-            valorPred = ""
-            metricsL = ""
-            global paisNN
-            paisNN = paisEspecifico
-            for rows in jsonArray:
-                if rows[tempPais] == paisEspecifico:
-                    if not(rows[tempDepa] in depas):
-                        depas.append(rows[tempDepa])
+                if not(rows[columnaDepa] in depas):
+                    depas.append(rows[tempDepa])
 
         elif depaEspecifico and columnaFecha and columnaInfectados and valorPrediccion:
             global auxG
@@ -985,8 +966,8 @@ def pred_mortalidad_depa(request):
             global coefsG
             global valorPredG
             try:
-                graphs, errors, metrics, coefs, valorPred, metricsL = getPredictionDepa(columnaFecha, tempPais, tempDepa, columnaInfectados,
-                                                                                        paisNN, depaEspecifico, jsonArray, valorPrediccion)
+                graphs, errors, metrics, coefs, valorPred, metricsL = getPredictionDepa(columnaFecha, tempDepa, columnaInfectados,
+                                                                                        depaEspecifico, jsonArray, valorPrediccion)
 
                 auxG = graphs
                 errorsT = errors
@@ -999,7 +980,7 @@ def pred_mortalidad_depa(request):
             except:
                 messages.error(request, "Error al analizar la informacion")
                 return render(request, 'predicciones/pred_mortalidad_depa.html', {'enc': enc,  'paises': paises})
-        elif not columnaPais or not columnaDepa or not paisEspecifico or not depaEspecifico or not columnaFecha or not columnaInfectados or not valorPrediccion:
+        elif not columnaDepa or not paisEspecifico or not depaEspecifico or not columnaFecha or not columnaInfectados or not valorPrediccion:
             messages.error(request, "Alguno de los campos posee un error")
             return render(request, 'predicciones/pred_mortalidad_depa.html', {'enc': enc,  'paises': paises})
 

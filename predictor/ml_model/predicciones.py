@@ -456,8 +456,8 @@ def getDoublePrediction(date, country, cases, deaths, countryName, csv, tiempoPr
     return [graph1, graph2, graph3, graph4, graph5, graph6, graph7], errors, errors2, [str(round(mse, 5)), str(round(rmse, 5)), str(round(r2, 5))], [str(round(mseD, 5)), str(round(rmseD, 5)), str(round(r2D, 5))], [eq, eqL], [eqD, eqLD], [valordePredPolinomial, valordePredLineal], [valordePredPolinomialD, valordePredLinealD], [str(round(mseL, 5)), str(round(rmseL, 5)), str(round(r2L, 5))], [str(round(mseLD, 5)), str(round(rmseLD, 5)), str(round(r2LD, 5))]
 
 
-def getPredictionDepa(date, country, department, cases, countryName, depaName, csv, tiempoPred):
-    col_list = [date, country, department, cases]
+def getPredictionDepa(date, department, cases, depaName, csv, tiempoPred):
+    col_list = [date, department, cases]
 
     dataset = pd.DataFrame(csv, columns=col_list)
     dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
@@ -465,15 +465,16 @@ def getPredictionDepa(date, country, department, cases, countryName, depaName, c
 
     dataset[cases] = pd.to_numeric(dataset[cases])
 
-    xx = dataset.loc[dataset[country] == countryName]
+    xx = dataset.loc[dataset[department] == depaName]
+
     auxLabel = pd.DatetimeIndex(xx[date])
     xx[date] = xx[date].astype('category').cat.codes
 
+    #y = res[cases].tolist()
+    #X = res[date].tolist()
+
     pos1 = dataset.columns.get_loc(date)
     pos2 = dataset.columns.get_loc(cases)
-
-    xx = xx.loc[xx[country] == countryName]
-    xx = xx.loc[xx[department] == depaName]
 
     X = xx.iloc[:, pos1].values
     X = X.reshape(-1, 1)

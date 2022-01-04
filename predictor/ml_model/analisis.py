@@ -100,15 +100,16 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     r2LD = r2_score(y_true=z, y_pred=model_curveDD)
 
     fig2 = plt.figure()
-    plt.plot(auxLabel, y, 'o', color=random.choice(colors))
-    plt.plot(auxLabel, z, 'o', color=random.choice(colors))
-    plt.plot(auxLabel, model_curve, '-',
-             color=random.choice(colors), linewidth=3)
+    plt.plot(X, y, 'o', color=random.choice(colors))
+    plt.plot(X, z, 'o', color=random.choice(colors))
+    plt.plot(X, model_curve, '-',
+             color=random.choice(colors), linewidth=3, label=str(cases))
     plt.plot(X[:, 0], model_curveDD, '-',
-             color=random.choice(colors), linewidth=3)
+             color=random.choice(colors), linewidth=3, label=str(deaths))
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
+    plt.legend()
     plt.title('Modelo de Regresión Lineal')
     plt.xticks(rotation=45)
     plt.tight_layout()
@@ -136,13 +137,14 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     plt.plot(auxLabel, y, 'o', color=random.choice(colors))
     plt.plot(auxLabel, z, 'o', color=random.choice(colors))
     plt.plot(auxLabel, model_curve, '-',
-             color=random.choice(colors), linewidth=3)
+             color=random.choice(colors), linewidth=3, label=str(cases))
     plt.plot(auxLabel, model_curveDD, '-',
-             color=random.choice(colors), linewidth=3)
+             color=random.choice(colors), linewidth=3, label=str(deaths))
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial entre grados 4')
+    plt.legend()
     plt.xticks(rotation=45)
     plt.tight_layout()
 
@@ -218,14 +220,15 @@ def getComparacion(date, country, cases, deaths, countryName, csv):
     plt.plot(auxLabel, y, 'o', color=random.choice(colors))
     plt.plot(auxLabel, z, 'o', color=random.choice(colors))
     plt.plot(auxLabel, model_curve3, '-',
-             color=random.choice(colors), linewidth=3)
+             color=random.choice(colors), linewidth=3, label=str(cases))
     plt.plot(auxLabel, model_curve3DD, '-',
-             color=random.choice(colors), linewidth=3)
+             color=random.choice(colors), linewidth=3, label=str(deaths))
     plt.grid()
     plt.xlabel(date)
     plt.ylabel(cases)
     plt.title('Modelo de Regresión Polinomial y Lineal de mejor grado ' +
               str(bestdegree) + "and" + str(bestdegree2))
+    plt.legend()
     plt.xticks(rotation=45)
     plt.tight_layout()
     flike = io.BytesIO()
