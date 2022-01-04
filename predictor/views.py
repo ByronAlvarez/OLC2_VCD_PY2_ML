@@ -80,8 +80,10 @@ def upload(request):
             reader = csv.DictReader(decoded_file)
             jsonArray = []
             for rows in reader:
-                for key in rows:
-                    if key is None or rows[key] is None:
+                # for key in rows:
+                for key in list(rows.keys()):
+                    # if key is None or rows[key] is None:
+                    if key is None:
                         del rows[key]
 
                 jsonArray.append(rows)
