@@ -224,7 +224,7 @@ def porcentaje_hombres(request):
                 graphs = porcentaje_men(
                     tempPais, columnaInfectados, columnaDeath, paisEspecifico, jsonArray)
                 auxG = graphs
-                messages.sucess(
+                messages.success(
                     request, "Se analizaron correctamente los datos")
             except:
                 messages.error(request, "Error al analizar la informacion")
@@ -321,7 +321,7 @@ def tasa_casos_casosdia_muertos(request):
                 graphs = tasa_casos_casosA_deaths(
                     columnaFecha, tempPais, columnaInfectados, columnaAcumulados, columnaDeath, paisEspecifico, jsonArray)
                 auxG = graphs
-                messages.sucess(request, "La data se analizo correctamente")
+                messages.success(request, "La data se analizo correctamente")
             except:
                 messages.error(request, "Alguno de los campos posee un error")
                 return render(request, 'indices_tasas/tasa_casos_casosdia_muertos.html', {'enc': enc,  'paises': paises})
@@ -437,7 +437,7 @@ def porcentaje_muertes(request):
                 graphs = porcentaje_muertess(
                     tempPais, columnaInfectados, columnaDeath, paisEspecifico, jsonArray)
                 auxG = graphs
-                messages.sucess(request, "Data analizada correctamente")
+                messages.success(request, "Data analizada correctamente")
             except:
                 messages.error(request, "Alguno de los campos posee un error")
                 return render(request, 'indices_tasas/porcentaje_muertes.html', {'enc': enc,  'paises': paises})
@@ -483,7 +483,7 @@ def muertes_region(request):
                 graphs = muertes_regionn(
                     tempPais, columnaReg, columnaInfectados, paisEspecifico, jsonArray)
                 auxG = graphs
-                messages.sucess(
+                messages.success(
                     request, "Se analizaron los datos correctamente")
             except:
                 messages.error(request, "Alguno de los campos posee un error")
@@ -597,7 +597,7 @@ def tasa_mortalidad(request):
                 errorsT.insert(0, ["Grado", "RMSE"])
                 metricsG = metrics
                 coefsG = coefs
-                messages.sucess(
+                messages.success(
                     request, "La inofrmacion se analizo correctamente")
             except:
                 messages.error(request, "Error al analizar la informacion")
@@ -655,7 +655,7 @@ def comp_vac(request):
                 listapaises = []
                 auxG = graphs
                 countriesG = countries
-                messages.sucess(request, "Se analizo correctamente")
+                messages.success(request, "Se analizo correctamente")
             except:
                 messages.error(request, "Error al analizar la data")
                 return render(request, 'analisis/comp_vac.html', {'enc': enc,  'paises': paises})
@@ -714,7 +714,7 @@ def ana_deaths_pais(request):
                 errorsT.insert(0, ["Grado", "RMSE"])
                 metricsG = metrics
                 coefsG = coefs
-                messages.sucess(
+                messages.success(
                     request, "Se analizo la informacion correctamente")
             except:
                 messages.error(request, "Error al analizar la informacion")
@@ -774,7 +774,7 @@ def comp_2omas(request):
                 listapaises = []
                 auxG = graphs
                 countriesG = countries
-                messages.sucess(request, "Se analizo la data con exito")
+                messages.success(request, "Se analizo la data con exito")
             except:
                 messages.error(request, "Error al analizar la data")
                 return render(request, 'analisis/comp_2omas.html', {'enc': enc,  'paises': paises})
@@ -853,7 +853,7 @@ def comp_casos_pruebas(request):
                 metrics2GL = metricsLD
                 coefsG = coefs
                 coefs2G = coefs2
-                messages.sucess(request, "Se analizo la data correctamente")
+                messages.success(request, "Se analizo la data correctamente")
             except:
                 messages.error(request, "Error al analizar la informacion")
                 return render(request, 'analisis/comp_casos_pruebas.html', {'enc': enc,  'paises': paises})
@@ -1069,7 +1069,7 @@ def pred_mortalidad_pais(request):
                 metricsGL = metricsL
                 coefsG = coefs
                 valorPredG = valorPred
-                messages.sucess(request, "Se analizo la data correctamente")
+                messages.success(request, "Se analizo la data correctamente")
             except:
                 messages.error(request, "Error al analizar los datos")
                 return render(request, 'predicciones/pred_mortalidad_pais.html', {'enc': enc,  'paises': paises})
@@ -1200,7 +1200,7 @@ def pred_casos_dia(request):
                 metricsGL = metricsL
                 coefsG = coefs
                 valorPredG = valorPred
-                messages.sucess(
+                messages.success(
                     request, "Se analizo la informacion correctamente")
             except:
                 messages.error(request, "Error al analizar los datos")
@@ -1284,7 +1284,7 @@ def pred_casos_muertes(request):
                 coefs2G = coefs2
                 valorPredG = valorPred
                 valorPred2G = valorPredD
-                messages.sucess(
+                messages.success(
                     request, "Se analizaron los datos correctamente")
             except:
                 messages.error(request, "Error al analizar la informacion")
@@ -1351,7 +1351,7 @@ def pred_ultimo_primero(request):
                 metricsGL = metricsL
                 coefsG = coefs
                 valorPredG = valorPred
-                messages.sucess(
+                messages.success(
                     request, "Se analizo la inforamcion correctamente")
             except:
                 messages.error(request, "Error al analizar la data")
@@ -1495,7 +1495,8 @@ def tendencia_vacuancion_pais(request):
                 errorsT.insert(0, ["Grado", "RMSE"])
                 metricsG = metrics
                 coefsG = coefs
-                messages.sucess(request, "Alguno de los campos posee un error")
+                messages.success(
+                    request, "Alguno de los campos posee un error")
             except:
                 messages.error(request, "Alguno de los campos posee un error")
                 return render(request, 'tendencias/tendencia_vacuancion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
@@ -1556,7 +1557,7 @@ def tendencia_infecxdia_pais(request):
                 errorsT.insert(0, ["Grado", "RMSE"])
                 metricsG = metrics
                 coefsG = coefs
-                messages.sucess(request, "Data analizada")
+                messages.success(request, "Data analizada")
             except:
                 messages.error(request, "Error en data")
                 return render(request, 'tendencias/tendencia_infecxdia_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
@@ -1618,7 +1619,7 @@ def tendencia_infeccion_pais(request):
                 errorsT.insert(0, ["Grado", "RMSE"])
                 metricsG = metrics
                 coefsG = coefs
-                messages.sucess(request, "Se analizo la data correctamente")
+                messages.success(request, "Se analizo la data correctamente")
             except:
                 messages.error(request, "Error al analizar la informacion")
                 return render(request,  'tendencias/tendencia_infeccion_pais.html', {'enc': enc, 'parameters': parameters, 'paises': paises})
