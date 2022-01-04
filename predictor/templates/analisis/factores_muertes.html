@@ -19,12 +19,12 @@
     {% load crispy_forms_tags %}
 
     {% block content %}
-    <h5 class="mt-2">Seleción de la columna de Paises </h5>
+    <h5 class="mt-2">Seleción de la columna de Pais </h5>
     <form action="" method="post">
         {% csrf_token %}
         <div class="row mt-3">
             <div class="col-md-4">
-                <label for="columnaPais" class="form-label">Columna del País:</label>
+                <label for="columnaPais" class="form-label">Columna de Pais:</label>
                 <select class="form-select" name="columnaPais" id="columnaPais">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
@@ -32,7 +32,6 @@
 
                 </select>
             </div>
-
 
         </div>
         <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Columna de Paises</button></div>
@@ -42,7 +41,7 @@
         {% csrf_token %}
         <div class="row mt-3">
             <div class="col-md-4">
-                <label for="paisEspecifico" class="form-label">País en Especifico:</label>
+                <label for="paisEspecifico" class="form-label">Pais:</label>
                 <select class="form-select" name="paisEspecifico" id="paisEspecifico">
                     {% for item in paises %}
                     <option value="{{ item }}">{{item}}</option>
@@ -51,8 +50,8 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="columnaFecha" class="form-label">Columna de Fechas:</label>
-                <select class="form-select" name="columnaFecha" id="columnaFecha">
+                <label for="columnaReg" class="form-label">Columna de Factores:</label>
+                <select class="form-select" name="columnaReg" id="columnaReg">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
                     {% endfor %}
@@ -60,7 +59,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="columnaInfectados" class="form-label">Columna de Infectados:</label>
+                <label for="columnaInfectados" class="form-label">Columna de Muertes:</label>
                 <select class="form-select" name="columnaInfectados" id="columnaInfectados">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
@@ -68,13 +67,6 @@
 
                 </select>
             </div>
-            <div class="col-md-4">
-                <label for="valorPrediccion">Valor a Futuro:</label>
-                <input type="number" class="form-control" id="valorPrediccion" name="valorPrediccion" min="1" max="365"
-                    placeholder=1>
-
-            </div>
-
 
         </div>
         <div class="col-12 mt-2"><button type="submit" class="btn btn-secondary">Get Param</button></div>
@@ -83,7 +75,7 @@
 
 
 
-    <h1 class="mt-4">Predicción de Infectados en un País</h1>
+    <h1 class="mt-4">Factores de muerte por COVID-19 en un país</h1>
     <hr class="mt-0 mb-4">
     {% if graphs %}
     <div>
@@ -92,63 +84,6 @@
         {% endfor %}
 
     </div>
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Grado</th>
-                        <th scope="col">RMSE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in errors %}
-                    <tr>
-                        <td>{{item.0}}</td>
-                        <td>{{item.1}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <h4 class="mt-4">La prediccion del modelo polinomial es de :</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6"> {{valorPred.0.0}}</p>
-
-    <h4 class="mt-4">La prediccion del modelo lineal es de :</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6"> {{valorPred.1.0}}</p>
-
-    <h4 class="mt-4">Ecuacion Polinomial</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6"> {{coefs.0}}</p>
-    <h4 class="mt-4">Ecuacion Lineal</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6"> {{coefs.1}}</p>
-
-    <h4 class="mt-4">Calculos Metricos Polinomiales</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metrics.0}}</p>
-
-    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metrics.1}}</p>
-
-    <p class="fs-6">Coeficiente de Determinación R2 = {{metrics.2}}</p>
-
-    <h4 class="mt-4">Calculos Metricos Lineales</h4>
-    <hr class="mt-0 mb-4">
-
-    <p class="fs-6">Error Cuadrático Medio (MSE) = {{metricsL.0}}</p>
-
-    <p class="fs-6">Raíz del Error Cuadrático Medio (RMSE) = {{metricsL.1}}</p>
-
-    <p class="fs-6">Coeficiente de Determinación R2 = {{metricsL.2}}</p>
 
 
     <form action="" method="get">

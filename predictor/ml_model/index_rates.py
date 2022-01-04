@@ -24,6 +24,124 @@ def poly_reg(degrees, x_train, y_train, model_curve):
     return [rmse_poly_train]
 
 
+def porcentaje_men(country, cases, gender, countryName, csv):
+    col_list = [country, cases, gender]
+
+    dataset = pd.DataFrame(csv, columns=col_list)
+
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[gender], inplace=True)
+
+    dataset[cases] = pd.to_numeric(dataset[cases])
+
+    xx = dataset.loc[dataset[country] == countryName]
+
+    res = xx.groupby(by=[gender]).sum().reset_index()
+
+    y = res[cases].tolist()
+
+    maxV = np.max(y)
+
+    #res = res.drop(res[cases] == maxV)
+    #res = res[res.cases != maxV]
+    res = res.drop(res.index[res[cases] == maxV])
+    print(res)
+    y = res[cases].tolist()
+    headers = res[gender].tolist()
+
+    arrayL = y
+
+    labels = headers
+    explode = (0.5, 0)
+
+    fig3 = plt.figure()
+    plt.pie(arrayL, labels=labels, explode=explode, autopct='%1.1f%%')
+    plt.axis('equal')
+
+    plt.legend(title="Gender - Cases:")
+
+    flike = io.BytesIO()
+    fig3.savefig(flike)
+    graph1 = base64.b64encode(flike.getvalue()).decode()
+
+    arrayL2 = np.array(y)
+    labels2 = headers
+    explode2 = (0.5, 0)
+
+    def absolute_value(val):
+        a = np.round(val/100.*arrayL2.sum(), 0)
+        return a
+
+    fig1 = plt.figure()
+    plt.pie(arrayL2, labels=labels2, explode=explode2, autopct=absolute_value)
+    plt.axis('equal')
+
+    plt.legend(title="Gender - Cases:")
+
+    flike = io.BytesIO()
+    fig1.savefig(flike)
+    graph2 = base64.b64encode(flike.getvalue()).decode()
+
+    return [graph1, graph2]
+
+
+def porcentaje_edades(country, ages, deaths, countryName, csv):
+    col_list = [country, ages, deaths]
+
+    dataset = pd.DataFrame(csv, columns=col_list)
+
+    dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
+    dataset.dropna(subset=[deaths], inplace=True)
+
+    dataset[deaths] = pd.to_numeric(dataset[deaths])
+
+    xx = dataset.loc[dataset[country] == countryName]
+
+    res = xx.groupby(by=[ages]).sum().reset_index()
+    y = res[deaths].tolist()
+    maxV = np.max(y)
+    res = res.drop(res.index[res[deaths] == maxV])
+
+    y = res[deaths].tolist()
+    headers = res[ages].tolist()
+
+    arrayL = y
+
+    labels = headers
+
+    def autopct_generator(limit):
+        """Remove percent on small slices."""
+        def inner_autopct(pct):
+            return ('%.2f%%' % pct) if pct > limit else ''
+        return inner_autopct
+
+    fig1 = plt.figure()
+    fig1, ax1 = plt.subplots(figsize=(6, 5))
+    box = ax1.get_position()
+    ax1.set_position([box.x0, box.y0, box.width * 1.3, box.height])
+
+    _, _, autotexts = ax1.pie(arrayL, autopct=autopct_generator(7),
+                              startangle=90,  radius=1.8 * 1000)
+    for autotext in autotexts:
+        autotext.set_weight('bold')
+
+    ax1.axis('equal')
+    plt.legend(
+        loc='upper left',
+        labels=['%s, %1.1f%%' % (l, (float(s) / maxV) * 100)
+                for l, s in zip(labels, arrayL)],
+        prop={'size': 12},
+        bbox_to_anchor=(0.0, 1),
+        bbox_transform=fig1.transFigure
+    )
+
+    flike = io.BytesIO()
+    fig1.savefig(flike)
+    graph2 = base64.b64encode(flike.getvalue()).decode()
+
+    return [graph2, graph2]
+
+
 def muertes_regionn(country, regions, deaths, countryName, csv):
     col_list = [country, regions, deaths]
     colors = random.choices(
@@ -33,8 +151,11 @@ def muertes_regionn(country, regions, deaths, countryName, csv):
 
     dataset = dataset.replace(r'^\s*$', np.NaN, regex=True)
     dataset.dropna(subset=[deaths], inplace=True)
+    dataset[regions] = dataset[regions].str.strip()
     dataset[deaths] = pd.to_numeric(dataset[deaths])
-    #dataset.fillna(0, inplace=True)
+    # dataset.fillna(0, inplace=True)
+
+    #
     xx = dataset.loc[dataset[country] == countryName]
     X_pre = xx[regions].values
     X_pre = list(dict.fromkeys(X_pre))
@@ -42,23 +163,27 @@ def muertes_regionn(country, regions, deaths, countryName, csv):
     print(X_pre)
     res = xx.groupby(by=[regions]).sum()
 
-    #pos1 = res.columns.get_loc(regions)
-    #pos2 = res.columns.get_loc(deaths)
-    #X = res[regions].tolist()
-    #X = X.reshape(-1, 1)
+    # pos1 = res.columns.get_loc(regions)
+    # pos2 = res.columns.get_loc(deaths)
+    # X = res[regions].tolist()
+    # X = X.reshape(-1, 1)
     y = res[deaths].tolist()
 
-    fig3 = plt.figure()
+    fig3 = plt.figure(figsize=(10, 5))
     plt.style.use('dark_background')
-    plt.bar(range(len(X_pre)), y, width=1, edgecolor="white", linewidth=0.7)
+
+    plt.bar(range(len(X_pre)), y, width=0.4,
+            edgecolor="white", linewidth=0.7)
 
     plt.xlabel(regions)
     plt.ylabel(deaths)
-    plt.title('Grafica de Muertes por Regiones')
+    plt.title('Grafica de ' + str(deaths))
     for i, v in enumerate(y):
         plt.text(i + .25, v + 3, str(v), color='white', fontweight='bold')
     plt.xticks(range(len(X_pre)), X_pre, rotation='vertical')
+
     plt.grid(color='#95a5a6', linestyle='--', linewidth=2, axis='y', alpha=0.7)
+
     plt.tight_layout()
 
     flike = io.BytesIO()

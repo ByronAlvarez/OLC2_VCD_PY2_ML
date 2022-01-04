@@ -29,6 +29,15 @@ urlpatterns = [
     path('porcentaje_muertes/', views.porcentaje_muertes),
     path('tasa_casos_muertes/', views.tasa_casos_muertes),
     path('tasa_casos_casosdia_muertos/', views.tasa_casos_casosdia_muertos),
+    path('muertes_edad/', views.muertes_edad),
+    path('porcentaje_hombres/', views.porcentaje_hombres),
+    path('factores_muertes/', views.factores_muertes),
+    path('clas_muni/', views.clas_muni),
+
+
+
+
+
 
 
 

@@ -24,7 +24,7 @@
         {% csrf_token %}
         <div class="row mt-3">
             <div class="col-md-4">
-                <label for="columnaPais" class="form-label">Columna del Continente:</label>
+                <label for="columnaPais" class="form-label">Columna del Pais:</label>
                 <select class="form-select" name="columnaPais" id="columnaPais">
                     {% for item in enc %}
                     <option value="{{ item }}">{{item}}</option>
@@ -96,7 +96,8 @@
 
 
 
-    <h1 class="mt-4">Tasa de comportamiento de casos activos en relación al número de muertes en un continente</h1>
+    <h1 class="mt-4">Tasa de crecimiento de casos de COVID-19 en relación con nuevos casos diarios y tasa de muerte por
+        COVID-19</h1>
     <hr class="mt-0 mb-4">
     {% if graphs %}
     <div>
