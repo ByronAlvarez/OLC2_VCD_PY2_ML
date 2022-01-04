@@ -10,6 +10,8 @@ pandas = "*"
 gunicorn = "*"
 scikit-learn = "*"
 reportlab = "*"
+matplotlib = "*"
+numpy = "*"
 
 [dev-packages]
 autopep8 = "*"
