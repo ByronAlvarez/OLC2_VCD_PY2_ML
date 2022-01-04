@@ -1,8 +1,5 @@
 from django.urls import path
 from . import views
-from . import viewsP
-from django.conf import settings
-from django.conf.urls.static import static
 
 # Url condig
 urlpatterns = [
@@ -33,14 +30,6 @@ urlpatterns = [
     path('porcentaje_hombres/', views.porcentaje_hombres),
     path('factores_muertes/', views.factores_muertes),
     path('clas_muni/', views.clas_muni),
-
-
-
-
-
-
-
-
 
 
 
