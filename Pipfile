@@ -12,6 +12,7 @@ scikit-learn = "*"
 reportlab = "*"
 matplotlib = "*"
 numpy = "*"
+openpyxl = "*"
 
 [dev-packages]
 autopep8 = "*"
